@@ -1,27 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_cleanjoin.c                                     :+:      :+:    :+:   */
+/*   malloc.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/02/22 14:16:16 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/02/22 14:17:16 by qdegraev         ###   ########.fr       */
+/*   Created: 2017/06/02 10:39:23 by qdegraev          #+#    #+#             */
+/*   Updated: 2017/06/02 11:00:18 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef __MALLOC_H__
+# define __MALLOC_H__
 
-char	*ft_cjoin(char *s1, char *s2)
-{
-	char	*stock;
+# include <sys/mman.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <sys/resource.h>
 
-	if (s1 == NULL && s2 == NULL)
-		return (NULL);
-	stock = ft_strjoin(s1, s2);
-	if (s1)
-		ft_strdel(&s1);
-	if (s2)
-		ft_strdel(&s2);
-	return (stock);
-}
+# define TINY
+# define SMALL
+# define LARGE
+
+void	show_alloc_mem();
+void	free(void *ptr);
+void	*malloc(size_t size);
+void	*realloc(void *ptr, size_t size);
+
+# endif

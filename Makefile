@@ -5,35 +5,48 @@
 #                                                     +:+ +:+         +:+      #
 #    By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2017/04/25 16:28:10 by qdegraev          #+#    #+#              #
-#    Updated: 2017/04/26 11:06:59 by qdegraev         ###   ########.fr        #
+#    Created: 2017/06/02 19:09:44 by qdegraev          #+#    #+#              #
+#    Updated: 2017/06/02 19:54:31 by qdegraev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC=clang
-FLAGS=-Wall -Wextra -Werror
-NAME=
-NAMES= Colleen Grace Sully
-SRC= $(addsuffix .c, $(NAMES))
-OBJ= $(SRC:.c=.o)
-TO_CLEAN=
+NAME= libft_malloc_$(HOSTTYPE).so
 
-all: $(NAMES)
+HOSTTYPE ?= $(shell uname -m)_$(shell uname -s)
 
-$(NAMES):
-	$(MAKE) $@.o
-	$(CC) $@.o  -o $@
+FLAGS= -Wall -Wextra -Werror
+CC= clang
+INCLUDES= includes/
 
-%.o: %.c
-	$(CC) $(FLAGS) -c $< -o $@
+VPATH= srcs/
+SRCS= \
+	  malloc.c \
+	  free.c \
+	  realloc.c \
+	  show_alloc_mem.c
+
+OBJDIR= objs/
+OBJS= $(patsubst %.c, $(OBJDIR)%.o, $(SRCS))
+
+test: $(NAME)
+	$(CC) $(FLAGS) -I $(INCLUDES) -L . -lft_malloc -o test test.c
+
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	ar rc $(NAME) $(OBJS)
+	ranlib $(NAME)
+	ln -s $(NAME) libft_malloc.so
+
+$(OBJDIR)%.o: %.c
+	$(CC) $(FLAGS) -I $(INCLUDES) -o $@ -c $<
 
 clean:
-	rm -rf $(OBJ)
+	rm -rf $(OBJS)
 
 fclean: clean
-	rm -rf $(SRC)
+	rm -rf $(NAME) libft_malloc.so
 
 re: fclean all
 
-.phony: re clean fclean
-
+.PHONY: re clean fclean all
