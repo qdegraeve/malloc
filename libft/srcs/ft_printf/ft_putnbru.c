@@ -1,18 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_putnbru.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/02 10:45:32 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/05 10:21:33 by qdegraev         ###   ########.fr       */
+/*   Created: 2016/02/11 21:31:45 by qdegraev          #+#    #+#             */
+/*   Updated: 2016/02/11 21:32:39 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "ft_printf.h"
 
-void	free(void *ptr)
+void	ft_putnbru(unsigned int nb)
 {
-	ptr = NULL;
+	if (nb < 10)
+	{
+		ft_putchar(nb + 48);
+		return ;
+	}
+	ft_putnbru(nb / 10);
+	ft_putchar((nb % 10) + 48);
+	return ;
 }

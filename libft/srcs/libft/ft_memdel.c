@@ -1,18 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_memdel.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/02 10:45:32 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/05 10:21:33 by qdegraev         ###   ########.fr       */
+/*   Created: 2016/03/16 10:02:19 by qdegraev          #+#    #+#             */
+/*   Updated: 2016/03/16 10:02:20 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "libft.h"
+#include <stdlib.h>
 
-void	free(void *ptr)
+void	ft_memdel(void **ap)
 {
-	ptr = NULL;
+	free(*ap);
+	*ap = NULL;
 }

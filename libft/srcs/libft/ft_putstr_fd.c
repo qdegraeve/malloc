@@ -1,18 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/02 10:45:32 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/05 10:21:33 by qdegraev         ###   ########.fr       */
+/*   Created: 2016/03/16 10:05:12 by qdegraev          #+#    #+#             */
+/*   Updated: 2016/03/16 10:05:14 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "libft.h"
 
-void	free(void *ptr)
+void	ft_putstr_fd(char const *s, int fd)
 {
-	ptr = NULL;
+	int	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	write(fd, s, i);
 }

@@ -1,18 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/02 10:45:32 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/05 10:21:33 by qdegraev         ###   ########.fr       */
+/*   Created: 2016/03/16 10:09:42 by qdegraev          #+#    #+#             */
+/*   Updated: 2016/03/16 10:09:43 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "libft.h"
 
-void	free(void *ptr)
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	ptr = NULL;
+	int		i;
+	int		len;
+	char	*new;
+
+	if (s == NULL || f == NULL)
+		return (NULL);
+	new = NULL;
+	i = 0;
+	len = ft_strlen(s);
+	if (!(new = (char*)malloc((len + 1) * sizeof(char))))
+		return (NULL);
+	while (s[i] != '\0')
+	{
+		new[i] = f(i, s[i]);
+		i++;
+	}
+	new[i] = '\0';
+	return (new);
 }

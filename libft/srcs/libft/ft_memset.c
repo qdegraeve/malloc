@@ -1,18 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/02 10:45:32 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/05 10:21:33 by qdegraev         ###   ########.fr       */
+/*   Created: 2016/03/16 10:02:35 by qdegraev          #+#    #+#             */
+/*   Updated: 2016/03/16 10:02:36 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "libft.h"
 
-void	free(void *ptr)
+void	*ft_memset(void *s, int c, size_t n)
 {
-	ptr = NULL;
+	char	*ptr;
+	size_t	i;
+
+	i = 0;
+	ptr = s;
+	while (i < n)
+	{
+		ptr[i] = (char)c;
+		i++;
+	}
+	return (s);
 }

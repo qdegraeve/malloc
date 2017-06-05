@@ -1,18 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/02 10:45:32 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/05 10:21:33 by qdegraev         ###   ########.fr       */
+/*   Created: 2016/03/16 10:02:27 by qdegraev          #+#    #+#             */
+/*   Updated: 2016/03/16 10:02:28 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "libft.h"
 
-void	free(void *ptr)
+void	*ft_memmove(void *dest, const void *src, size_t n)
 {
-	ptr = NULL;
+	char	tmp[n];
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+	{
+		tmp[i] = ((char*)src)[i];
+		i++;
+	}
+	i = 0;
+	while (i < n && dest)
+	{
+		((char*)dest)[i] = tmp[i];
+		i++;
+	}
+	((char*)dest)[i] = '\0';
+	return (dest);
 }

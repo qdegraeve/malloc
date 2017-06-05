@@ -1,18 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   type_f.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/02 10:45:32 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/05 10:21:33 by qdegraev         ###   ########.fr       */
+/*   Created: 2016/02/12 20:27:45 by qdegraev          #+#    #+#             */
+/*   Updated: 2016/02/22 10:46:32 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "ft_printf.h"
 
-void	free(void *ptr)
+void	type_f(t_arg *a)
 {
-	ptr = NULL;
+	char *f;
+
+	f = ft_dtoa_base(va_arg(a->ap, double), 10, a->p, a);
+	a->ret = ft_strlen(f);
+	ft_putstr(f);
 }

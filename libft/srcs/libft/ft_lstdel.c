@@ -1,18 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_lstdel.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/06/02 10:45:32 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/05 10:21:33 by qdegraev         ###   ########.fr       */
+/*   Created: 2016/03/16 09:59:51 by qdegraev          #+#    #+#             */
+/*   Updated: 2016/03/16 09:59:52 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "malloc.h"
+#include "libft.h"
 
-void	free(void *ptr)
+void		ft_lstdel(t_list **alst, void (*del)(void *, size_t))
 {
-	ptr = NULL;
+	t_list	*tmp;
+	t_list	*backup;
+
+	if (*alst == NULL || del == NULL)
+		return ;
+	tmp = *alst;
+	while (tmp)
+	{
+		backup = tmp->next;
+		ft_lstdelone(&tmp, (*del));
+		tmp = backup;
+	}
+	*alst = NULL;
 }

@@ -6,7 +6,7 @@
 #    By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/06/02 19:09:44 by qdegraev          #+#    #+#              #
-#    Updated: 2017/06/02 19:54:31 by qdegraev         ###   ########.fr        #
+#    Updated: 2017/06/05 18:48:40 by qdegraev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,8 @@ HOSTTYPE ?= $(shell uname -m)_$(shell uname -s)
 FLAGS= -Wall -Wextra -Werror
 CC= clang
 INCLUDES= includes/
+LIBPATH= libft
+LIB= $(LIBPATH)/libft.a
 
 VPATH= srcs/
 SRCS= \
@@ -28,18 +30,22 @@ SRCS= \
 OBJDIR= objs/
 OBJS= $(patsubst %.c, $(OBJDIR)%.o, $(SRCS))
 
+default: all
+
 test: $(NAME)
 	$(CC) $(FLAGS) -I $(INCLUDES) -L . -lft_malloc -o test test.c
 
-all: $(NAME)
+all: $(LIB) $(NAME)
+
+$(LIB):
+	make -C $(LIBPATH)
 
 $(NAME): $(OBJS)
-	ar rc $(NAME) $(OBJS)
-	ranlib $(NAME)
+	$(CC) -shared -o $(NAME) $(OBJS) -L $(LIBPATH) -lft
 	ln -s $(NAME) libft_malloc.so
 
 $(OBJDIR)%.o: %.c
-	$(CC) $(FLAGS) -I $(INCLUDES) -o $@ -c $<
+	$(CC) $(FLAGS) -I libft/include -I $(INCLUDES) -o $@ -c $<
 
 clean:
 	rm -rf $(OBJS)
