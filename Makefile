@@ -6,7 +6,7 @@
 #    By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/06/02 19:09:44 by qdegraev          #+#    #+#              #
-#    Updated: 2017/06/05 18:48:40 by qdegraev         ###   ########.fr        #
+#    Updated: 2017/06/06 17:41:28 by qdegraev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,8 @@ SRCS= \
 	  malloc.c \
 	  free.c \
 	  realloc.c \
-	  show_alloc_mem.c
+	  show_alloc_mem.c \
+	  zone_tools.c
 
 OBJDIR= objs/
 OBJS= $(patsubst %.c, $(OBJDIR)%.o, $(SRCS))

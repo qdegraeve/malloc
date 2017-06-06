@@ -6,17 +6,23 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 10:44:56 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/05 17:41:15 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/06 20:42:56 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-void	*malloc(size_t size)
+void	*ft_malloc(size_t size)
 {
-	void *str;
+	t_meta	*zone;
+	t_meta	*block;
 
-	ft_bzero(&g_memory, sizeof(t_mem_starts));
-	str = mmap(0, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, 0, 0);
-	return(str);
+	zone = zone_list(size);
+	if (zone && (block = find_space(&zone, size)))
+		block->free = 0;
+	else
+		block = alloc_zone(zone, size);
+	if (!block)
+		return (NULL);
+	return(block + 1);
 }
