@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 10:39:23 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/07 12:55:19 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/07 17:08:38 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define TINY 256
 # define SMALL 4096
 # define META_SIZE sizeof(t_meta)
+# define HEAP_META_SIZE sizeof(t_heap)
 # define FLAG_PROT (PROT_READ | PROT_WRITE)
 # define FLAG_MAP (MAP_ANON | MAP_PRIVATE)
 
@@ -52,14 +53,14 @@ struct	s_meta
 struct	s_heap
 {
 	size_t		size;
-	t_meta		*zone;
 	t_heap		*next;
+	char		block[1];
 };
 
 t_memory	g_memory;
 
 void	show_alloc_mem();
-void	ft_free(void *ptr);
+void	free(void *ptr);
 void	*ft_malloc(size_t size);
 void	*realloc(void *ptr, size_t size);
 t_meta	*zone_list(size_t size);

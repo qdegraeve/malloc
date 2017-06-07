@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 10:48:20 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/07 12:12:48 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/07 15:02:24 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ static int	print_list(t_meta *list)
 		{
 			if (!list->free)
 			{
-				ft_putbase((unsigned long)(list + META_SIZE), 16);
+				ft_putbase((unsigned long)(list->data), 16);
 				write(1, " - ", 3);
-				ft_putbase((unsigned long)(list + META_SIZE + list->size), 16);
+				ft_putbase((unsigned long)(list->data + list->size), 16);
 				write(1, " : ", 3);
 				ft_putnbr(list->size);
 				write(1, " octets\n", 8);
