@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/06 10:08:51 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/06 22:03:18 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/07 13:08:01 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,24 @@ void	create_memory(size_t size, t_meta *block)
 		g_memory.large = block;
 }
 
+void	add_to_heap(t_meta *zone, size_t size)
+{
+	t_heap	*heap;
+	t_heap	*new;
+
+	heap = g_memory.heap;
+	new = NULL;
+	new->size = size;
+	new->zone = zone;
+	new->next = NULL;
+	while (heap && heap->next)
+		heap = heap->next;
+	if (heap)
+		heap->next = new;
+	else
+		g_memory.heap = new;
+}
+
 t_meta	*alloc_zone(t_meta *last, size_t size)
 {
 	t_meta	*new;
@@ -59,7 +77,7 @@ t_meta	*alloc_zone(t_meta *last, size_t size)
 	printf("new->size == %lu\n", new->size);
 	printf("new->next->size == %lu\n", new->next ? new->next->size : 0);
 	if (size < zone_size)
-		adjust_zone(&new, size);
+		adjust_zone(new, size);
 	printf("new->size == %lu\n", new->size);
 	printf("new->next->size == %lu\n", new->next->size);
 	if (last)
@@ -68,6 +86,7 @@ t_meta	*alloc_zone(t_meta *last, size_t size)
 		create_memory(size, new);
 	printf("adresse de tiny == %p\n", g_memory.tiny);
 	printf("adresse de new == %p\n", new);
+	add_to_heap(new, zone_size);
 	return (new);
 }
 
@@ -89,25 +108,25 @@ t_meta	*find_space(t_meta **last_block, size_t size)
 	if (block)
 		printf("block->size == %lu\n", block->size);
 	if (block && block->size > size)
-		adjust_zone(&block, size);
+		adjust_zone(block, size);
 	return (block);
 }
 
-void	adjust_zone(t_meta **block, size_t size)
+void	adjust_zone(t_meta *block, size_t size)
 {
 	t_meta	*new;
 
 	DEBUG
-	printf("size == %lu\n*block->size == %lu\nMETA_SIZE == %lu\n", size, (*block)->size, META_SIZE);
-	new = (t_meta*)((char*)*block + size + META_SIZE);
-	new->size = ((*block)->size - (size + META_SIZE));
+	printf("size == %lu\n*block->size == %lu\nMETA_SIZE == %lu\n", size, block->size, META_SIZE);
+	new = (t_meta*)((char*)block + size + META_SIZE);
+	new->size = (block->size - (size + META_SIZE));
 	new->free = 1;
-	new->next = (*block)->next;
-	(*block)->size = size;
-	(*block)->next = new;
+	new->next = block->next;
+	block->size = size;
+	block->next = new;
 	printf("new->size == %lu\n", new->size);
-	printf("(*block)->size == %lu\n", (*block)->size);
-	printf("adresse de *block == %p\n", *block);
+	printf("block->size == %lu\n", block->size);
+	printf("adresse de block == %p\n", block);
 	printf("adresse de new == %p\n", new);
 
 }

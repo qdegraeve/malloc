@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 10:44:56 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/06 20:42:56 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/07 12:48:48 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,5 @@ void	*ft_malloc(size_t size)
 		block = alloc_zone(zone, size);
 	if (!block)
 		return (NULL);
-	return(block + 1);
+	return((void*)block->data);
 }

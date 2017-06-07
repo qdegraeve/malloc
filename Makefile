@@ -6,7 +6,7 @@
 #    By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/06/02 19:09:44 by qdegraev          #+#    #+#              #
-#    Updated: 2017/06/06 17:41:28 by qdegraev         ###   ########.fr        #
+#    Updated: 2017/06/07 10:30:32 by qdegraev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ OBJS= $(patsubst %.c, $(OBJDIR)%.o, $(SRCS))
 default: all
 
 test: $(NAME)
-	$(CC) $(FLAGS) -I $(INCLUDES) -L . -lft_malloc -o test test.c
+	$(CC) $(FLAGS) -I $(INCLUDES) -I libft/include/ -L libft -lft -L . -lft_malloc -o test test.c
 
 all: $(LIB) $(NAME)
 
