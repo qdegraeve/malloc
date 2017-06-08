@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 10:45:32 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/08 18:33:45 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/09 01:39:06 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,14 @@ void	error(void *ptr, int origin)
 
 void	munmap_heap(t_heap *prev, t_heap *heap, size_t size)
 {
-	if (((t_meta*)(heap->block))->prev)
+	t_meta	*block_prev;
+
+	block_prev = ((t_meta*)(heap->block))->prev;
+	if (block_prev)
 	{
-		((t_meta*)(heap->block))->prev->next = ((t_meta*)(heap->block))->next;
-		((t_meta*)(heap->block))->prev->next->prev = ((t_meta*)(heap->block))->prev;
+		block_prev->next = ((t_meta*)(heap->block))->next;
+		if (block_prev->next)
+			block_prev->next->prev = block_prev;
 	}
 	else
 	{
@@ -64,6 +68,7 @@ void	munmap_heap(t_heap *prev, t_heap *heap, size_t size)
 		else
 			g_memory.large = ((t_meta*)(heap->block))->next;
 	}
+
 	if (prev != heap)
 		prev->next = heap->next;
 	else
@@ -98,9 +103,6 @@ void	free(void *ptr)
 	t_heap	*heap;
 	t_heap	*prev;
 
-	write(1, "adresse a liberer : ", 18);
-	ft_putbase((unsigned long)ptr, 16);
-	write(1, "\n", 1);
 	heap = g_memory.heap;
 	prev = heap;
 	while(heap && !((void*)heap < ptr && (void*)(heap) + heap->size > ptr))
@@ -116,7 +118,4 @@ void	free(void *ptr)
 		else
 			find_and_free(ptr, (t_meta*)heap->block, prev, heap);
 	}
-	write(1, "sortie\n", 7);
-	show_alloc_mem();
-		//error(ptr, FREE_FCT);
 }

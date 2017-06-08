@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 10:48:20 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/08 18:42:13 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/09 01:12:04 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,8 @@ static int	print_list(t_meta *list)
 	size = 0;
 	while(list)
 	{
-		ft_putnbr(META_SIZE);
-		write(1, "test\n", 5);
 		if (!list->free)
 		{
-		write(1, "test2\n", 6);
 			ft_putbase((unsigned long)(list->data), 16);
 			write(1, " - ", 3);
 			ft_putbase((unsigned long)(list->data + list->size), 16);
@@ -32,8 +29,6 @@ static int	print_list(t_meta *list)
 			write(1, " octets\n", 8);
 			size += list->size;
 		}
-		if (list->free && list->heap_start)
-			write(1, "test3\n", 6);
 		list = list->next;
 	}
 	return (size);
