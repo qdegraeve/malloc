@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 10:39:23 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/08 11:30:08 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/08 14:29:39 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,13 @@ t_memory	g_memory;
 
 void	show_alloc_mem();
 void	free(void *ptr);
-void	*ft_malloc(size_t size);
+void	*malloc(size_t size);
 void	*realloc(void *ptr, size_t size);
 t_meta	*zone_list(size_t size);
 int		get_zone_size(size_t size);
 t_meta	*alloc_zone(t_meta *last, size_t size);
 t_meta	*find_space(t_meta **last_block, size_t size);
 void	adjust_zone(t_meta *block, size_t size);
+void	error();
 
 # endif

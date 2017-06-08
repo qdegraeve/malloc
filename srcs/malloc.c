@@ -6,13 +6,13 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 10:44:56 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/08 12:14:05 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/08 14:17:45 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-void	*ft_malloc(size_t size)
+void	*malloc(size_t size)
 {
 	t_meta	*zone;
 	t_meta	*block;
