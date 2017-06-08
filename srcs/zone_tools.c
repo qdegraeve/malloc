@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/06 10:08:51 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/07 15:07:11 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/08 12:13:55 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ int		get_zone_size(size_t size)
 	int		page;
 
 	page = getpagesize();
-	zone = ((((size + sizeof(t_meta) - 1) * 100) / page) * page) + page;
+	if (size <= SMALL)
+		zone = (((((size + META_SIZE) * 100) + HEAP_META_SIZE - 1) / page) * page) + page;
+	else
+		zone = size + META_SIZE + HEAP_META_SIZE;
 	return (zone);
 }
 
@@ -49,7 +52,7 @@ void	*new_heap(size_t size)
 
 	heap = g_memory.heap;
 	new = mmap(0, size, FLAG_PROT, FLAG_MAP, 0, 0);
-	new->size = size;
+	new->size = size - HEAP_META_SIZE;
 	new->next = NULL;
 	while (heap && heap->next)
 		heap = heap->next;
@@ -65,18 +68,22 @@ t_meta	*alloc_zone(t_meta *last, size_t size)
 	t_meta	*new;
 	size_t	zone_size;
 
-	zone_size = get_zone_size(size) - HEAP_META_SIZE;
+	zone_size = get_zone_size(size);
 	new = new_heap(zone_size);
 	if (!new)
 		return (NULL);
-	new->size = zone_size - META_SIZE;
+	new->size = zone_size - HEAP_META_SIZE - META_SIZE;
 	new->free = 0;
 	new->next = NULL;
+	new->prev = NULL;
 	new->heap_start = 1;
-	if (size < zone_size)
+	if (size < (zone_size - META_SIZE - HEAP_META_SIZE))
 		adjust_zone(new, size);
 	if (last)
+	{
 		last->next = new;
+		new->prev = last;
+	}
 	else
 		create_memory(size, new);
 	return (new);
@@ -106,6 +113,7 @@ void	adjust_zone(t_meta *block, size_t size)
 	new->free = 1;
 	new->heap_start = 0;
 	new->next = block->next;
+	new->prev = block;
 	block->size = size;
 	block->next = new;
 }

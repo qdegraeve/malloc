@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 10:39:23 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/07 17:08:38 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/08 11:30:08 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ struct	s_meta
 	int			heap_start;
 	size_t		size;
 	t_meta		*next;
+	t_meta		*prev;
 	char		data[1];
 };
 

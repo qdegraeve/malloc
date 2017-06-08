@@ -6,15 +6,15 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/12 19:29:31 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/02/12 19:29:34 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/08 09:56:40 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putbase(unsigned int n, unsigned int base)
+void	ft_putbase(unsigned long n, unsigned int base)
 {
-	unsigned int	tmp;
+	unsigned long	tmp;
 
 	if (n >= base)
 		ft_putbase(n / base, base);

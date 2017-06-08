@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/08 10:56:16 by qdegraev          #+#    #+#             */
-/*   Updated: 2016/03/30 16:48:11 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/08 09:33:18 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,6 @@ unsigned char		*stock_wchar(char **to_print);
 int					ft_printf(char *format, ...);
 void				check_type(char *format, t_arg *a);
 
-# define DEBUG ft_printf("- %s - l%d - %s\n", __FILE__, __LINE__, __FUNCTION__);
+# define DEBUG printf("- %s - l%d - %s\n", __FILE__, __LINE__, __FUNCTION__);
 
 #endif
