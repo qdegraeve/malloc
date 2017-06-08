@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 10:44:56 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/08 14:17:45 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/08 16:33:21 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,5 @@ void	*malloc(size_t size)
 		block = alloc_zone(zone, size);
 	if (!block)
 		return (NULL);
-	printf("addresse de ptr apres malloc de [%lu] == %p\n", size, (void*)block->data);
 	return((void*)block->data);
 }

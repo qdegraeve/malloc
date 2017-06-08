@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 10:39:23 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/08 14:29:39 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/08 16:41:07 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # define HEAP_META_SIZE sizeof(t_heap)
 # define FLAG_PROT (PROT_READ | PROT_WRITE)
 # define FLAG_MAP (MAP_ANON | MAP_PRIVATE)
+# define FREE_FCT 1
+# define REALLOC_FCT 2
 
 typedef struct s_memory	t_memory;
 typedef struct s_meta	t_meta;
@@ -69,6 +71,6 @@ int		get_zone_size(size_t size);
 t_meta	*alloc_zone(t_meta *last, size_t size);
 t_meta	*find_space(t_meta **last_block, size_t size);
 void	adjust_zone(t_meta *block, size_t size);
-void	error();
+void	error(void *ptr, int origin);
 
 # endif
