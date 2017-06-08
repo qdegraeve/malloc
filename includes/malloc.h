@@ -6,17 +6,15 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 10:39:23 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/08 16:41:07 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/08 17:40:03 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __MALLOC_H__
 # define __MALLOC_H__
 
-# include <stdio.h>
 # include <sys/mman.h>
 # include <unistd.h>
-# include <stdlib.h>
 # include <sys/resource.h>
 # include "../libft/include/ft_printf.h"
 # include "../libft/include/libft.h"

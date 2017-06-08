@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/06 10:08:51 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/08 15:36:24 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/08 17:40:06 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ int		get_zone_size(size_t size)
 
 	page = getpagesize();
 	if (size <= SMALL)
-		zone = (((((size + META_SIZE) * 100) + HEAP_META_SIZE - 1) / page) * page) + page;
+		zone = (((((size + META_SIZE) * 100) + HEAP_META_SIZE - 1) / page) \
+				* page) + page;
 	else
 		zone = size + META_SIZE + HEAP_META_SIZE;
 	return (zone);
@@ -87,21 +88,6 @@ t_meta	*alloc_zone(t_meta *last, size_t size)
 	else
 		create_memory(size, new);
 	return (new);
-}
-
-t_meta	*find_space(t_meta **last_block, size_t size)
-{
-	t_meta	*block;
-
-	block = zone_list(size);
-	while (block && !(block->size >= size && block->free))
-	{
-		*last_block = block;
-		block = block->next;
-	}
-	if (block && block->size > size)
-		adjust_zone(block, size);
-	return (block);
 }
 
 void	adjust_zone(t_meta *block, size_t size)
