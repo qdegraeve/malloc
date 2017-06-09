@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 10:39:23 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/09 19:20:58 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/09 19:52:22 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include "../libft/include/get_next_line.h"
 
 # define TINY 90
-# define SMALL 4056
+# define SMALL 1050
 # define META_SIZE sizeof(t_meta)
 # define HEAP_META_SIZE sizeof(t_heap)
 # define FLAG_PROT (PROT_READ | PROT_WRITE)
