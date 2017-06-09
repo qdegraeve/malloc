@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 18:48:56 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/09 01:45:50 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/09 17:22:37 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ void	*move_pointer(void *ptr, size_t size)
 
 	new = NULL;
 	new = malloc(size);
-	ft_memcpy(new, ptr, size);
+	if (new)
+		new = ft_memcpy(new, ptr, size);
 	free(ptr);
 	return (new);
 }
@@ -62,12 +63,9 @@ void	*realloc(void *ptr, size_t size)
 	if (!ptr)
 		return (malloc(size));
 	if (!(block = check_ptr(ptr)))
-		return (malloc(size));
+		return (move_pointer(ptr, size));
 	if (size == 0)
-	{
-		free(ptr);
-		return (malloc(0));
-	}
+		return (move_pointer(ptr, size));
 	if (!has_space_after(block->next, block->size, size))
 		return (move_pointer(ptr, size));
 	block->size += (block->next->size + META_SIZE);
