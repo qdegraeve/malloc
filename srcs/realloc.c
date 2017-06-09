@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 18:48:56 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/09 17:22:37 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/09 17:26:08 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ t_meta	*check_ptr(void *ptr)
 	t_meta	*block;
 
 	heap = g_memory.heap;
-	while(heap && !((void*)heap < ptr && (void*)(heap) + heap->size > ptr))
+	while (heap && !((void*)heap < ptr && (void*)(heap) + heap->size > ptr))
 		heap = heap->next;
 	if (!heap)
 		return (NULL);
 	block = (t_meta*)heap->block;
-	while(block && (void*)block->data != ptr)
+	while (block && (void*)block->data != ptr)
 	{
 		block = block->next;
 		if (block->heap_start || !block)
