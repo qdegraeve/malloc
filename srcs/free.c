@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 10:45:32 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/09 16:50:22 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/09 19:17:31 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ void	munmap_heap(t_heap *prev, t_heap *heap, size_t size)
 		prev->next = heap->next;
 	else
 		g_memory.heap = heap->next;
-	munmap(heap, heap->size);
 }
 
 void	find_and_free(void *ptr, t_meta *block, t_heap *prev, t_heap *heap)
@@ -80,7 +79,9 @@ void	find_and_free(void *ptr, t_meta *block, t_heap *prev, t_heap *heap)
 	tmp = tmp->free ? tmp : block;
 	block = defragment_blocks(tmp, block);
 	if (block->heap_start && block->size + META_SIZE == heap->size)
+	{
 		munmap_heap(prev, heap, size);
+	}
 }
 
 void	free(void *ptr)
@@ -105,4 +106,5 @@ void	free(void *ptr)
 		else
 			find_and_free(ptr, (t_meta*)heap->block, prev, heap);
 	}
+	debug_show_actions(FREE_FCT, ptr);
 }

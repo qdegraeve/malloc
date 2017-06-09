@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 18:48:56 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/09 17:26:08 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/09 19:12:14 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_meta	*check_ptr(void *ptr)
 	return (block);
 }
 
-void	*move_pointer(void *ptr, size_t size)
+void	*move_pointer(void *ptr, size_t size, int must_free)
 {
 	void	*new;
 
@@ -40,7 +40,8 @@ void	*move_pointer(void *ptr, size_t size)
 	new = malloc(size);
 	if (new)
 		new = ft_memcpy(new, ptr, size);
-	free(ptr);
+	if (new && must_free)
+		free(ptr);
 	return (new);
 }
 
@@ -63,11 +64,33 @@ void	*realloc(void *ptr, size_t size)
 	if (!ptr)
 		return (malloc(size));
 	if (!(block = check_ptr(ptr)))
-		return (move_pointer(ptr, size));
+		return (move_pointer(ptr, size, 1));
 	if (size == 0)
-		return (move_pointer(ptr, size));
+		return (move_pointer(ptr, size, 1));
 	if (!has_space_after(block->next, block->size, size))
-		return (move_pointer(ptr, size));
+		return (move_pointer(ptr, size, 1));
+	block->size += (block->next->size + META_SIZE);
+	block->next = block->next->next;
+	if (block->next)
+		block->next->prev = block;
+	if (block->size > size)
+		adjust_zone(block, size);
+	return (ptr);
+}
+
+void	*reallocf(void *ptr, size_t size)
+{
+	t_meta	*block;
+
+	block = NULL;
+	if (!ptr)
+		return (malloc(size));
+	if (!(block = check_ptr(ptr)))
+		return (move_pointer(ptr, size, 0));
+	if (size == 0)
+		return (move_pointer(ptr, size, 0));
+	if (!has_space_after(block->next, block->size, size))
+		return (move_pointer(ptr, size, 0));
 	block->size += (block->next->size + META_SIZE);
 	block->next = block->next->next;
 	if (block->next)

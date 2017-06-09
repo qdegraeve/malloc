@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 10:48:20 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/09 17:30:44 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/09 17:38:44 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	print_list(t_meta *list)
 	size = 0;
 	while (list)
 	{
-		if (!list->free)
+		if (!list->free || debug_show_free())
 		{
 			ft_putbase((unsigned long)(list->data), 16);
 			write(1, " - ", 3);
@@ -27,13 +27,13 @@ static int	print_list(t_meta *list)
 			write(1, " : ", 3);
 			ft_putnbr(list->size);
 			write(1, " octets", 8);
-			//if ((list->free & debug_show_free()) > 0)
-			//	write(1, " utilisables", 12);
+			if ((list->free & debug_show_free()) != 0)
+				write(1, " utilisables", 12);
 			size += list->size;
 		}
-//		if (list->heap_start && debug_show_mmap())
-//			ft_putstr("  --   HEAD OF PAGE\n");
-//		else
+		if (list->heap_start && debug_show_mmap())
+			ft_putstr("  --   HEAD OF PAGE\n");
+		else
 			write(1, "\n", 1);
 		list = list->next;
 	}
