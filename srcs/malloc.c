@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 10:44:56 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/09 01:38:29 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/09 16:50:32 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,25 @@ t_meta	*find_space(t_meta **last_block, size_t size)
 		*last_block = block;
 		block = block->next;
 	}
-	if (block && (block->size  > size + META_SIZE))
+	if (block && (block->size > size + META_SIZE))
 		adjust_zone(block, size);
 	return (block);
+}
+
+void	adjust_zone(t_meta *block, size_t size)
+{
+	t_meta	*new;
+
+	new = (t_meta*)(block->data + size);
+	new->size = block->size - size - META_SIZE;
+	new->free = 1;
+	new->heap_start = 0;
+	new->next = block->next;
+	if (new->next)
+		new->next->prev = new;
+	new->prev = block;
+	block->size = size;
+	block->next = new;
 }
 
 void	*malloc(size_t size)
@@ -39,5 +55,5 @@ void	*malloc(size_t size)
 		block = alloc_zone(zone, size);
 	if (!block)
 		return (NULL);
-	return((void*)block->data);
+	return ((void*)block->data);
 }
