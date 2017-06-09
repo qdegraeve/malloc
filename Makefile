@@ -6,7 +6,7 @@
 #    By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/06/02 19:09:44 by qdegraev          #+#    #+#              #
-#    Updated: 2017/06/09 18:57:53 by qdegraev         ###   ########.fr        #
+#    Updated: 2017/06/09 20:01:27 by qdegraev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,8 +46,11 @@ $(NAME): $(OBJS)
 	$(CC) -shared -o $(NAME) $(OBJS) -L $(LIBPATH) -lft
 	ln -s $(NAME) libft_malloc.so
 
-$(OBJDIR)%.o: %.c
+$(OBJDIR)%.o: %.c $(OBJDIR)
 	$(CC) $(FLAGS) -I libft/include -I $(INCLUDES) -o $@ -c $<
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
 
 clean:
 	make clean -C $(LIBPATH)
