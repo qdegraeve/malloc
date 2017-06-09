@@ -6,7 +6,7 @@
 /*   By: qdegraev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/02 10:45:32 by qdegraev          #+#    #+#             */
-/*   Updated: 2017/06/09 01:39:06 by qdegraev         ###   ########.fr       */
+/*   Updated: 2017/06/09 16:50:22 by qdegraev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,6 @@ t_meta	*defragment_blocks(t_meta *block1, t_meta *block2)
 	return (block2);
 }
 
-void	error(void *ptr, int origin)
-{
-	ft_putstr("malloc: *** error for object ");
-	ft_putbase((unsigned long)ptr, 16);
-	ft_putstr(": pointer being ");
-	if (origin == FREE_FCT)
-		ft_putstr("freed");
-	else if (origin == REALLOC_FCT)
-		ft_putstr("realloc'd");
-	ft_putstr(" was not allocated\n");
-	//abort();
-}
-
 void	munmap_heap(t_heap *prev, t_heap *heap, size_t size)
 {
 	t_meta	*block_prev;
@@ -68,7 +55,6 @@ void	munmap_heap(t_heap *prev, t_heap *heap, size_t size)
 		else
 			g_memory.large = ((t_meta*)(heap->block))->next;
 	}
-
 	if (prev != heap)
 		prev->next = heap->next;
 	else
@@ -83,13 +69,12 @@ void	find_and_free(void *ptr, t_meta *block, t_heap *prev, t_heap *heap)
 
 	tmp = block;
 	size = 0;
-	while(block && (void*)block->data != ptr)
+	while (block && (void*)block->data != ptr)
 	{
 		tmp = block;
 		block = block->next;
 		if (block->heap_start || !block)
 			return ;
-			//error(ptr, FREE_FCT);
 	}
 	size = block->size;
 	tmp = tmp->free ? tmp : block;
@@ -105,7 +90,9 @@ void	free(void *ptr)
 
 	heap = g_memory.heap;
 	prev = heap;
-	while(heap && !((void*)heap < ptr && (void*)(heap) + heap->size > ptr))
+	if (!ptr)
+		return ;
+	while (heap && !((void*)heap < ptr && (void*)(heap) + heap->size > ptr))
 	{
 		prev = heap;
 		heap = heap->next;
