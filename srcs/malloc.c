@@ -48,13 +48,22 @@ void	*malloc(size_t size)
 	t_meta	*zone;
 	t_meta	*block;
 
+	if (pthread_mutex_lock(&g_safe.mut_malloc) == EINVAL)
+	{
+		pthread_mutex_init(&g_safe.mut_malloc, NULL);
+		pthread_mutex_lock(&g_safe.mut_malloc);
+	}
 	zone = zone_list(size);
-	if (size <= 4096 && zone && (block = find_space(&zone, size)))
+	if (size <= SMALL && zone && (block = find_space(&zone, size)))
 		block->free = 0;
 	else
 		block = alloc_zone(zone, size);
 	if (!block)
+	{
+		pthread_mutex_unlock(&g_safe.mut_malloc);
 		return (NULL);
+	}
 	debug_show_actions(MALLOC_FCT, NULL);
+	pthread_mutex_unlock(&g_safe.mut_malloc);
 	return ((void*)block->data);
 }

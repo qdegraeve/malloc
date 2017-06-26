@@ -12,30 +12,27 @@
 
 #include "malloc.h"
 
-t_meta	*defragment_blocks(t_meta *block1, t_meta *block2)
+t_meta		*defragment_blocks(t_meta *block1, t_meta *block2)
 {
-	if (block1 != block2 && block2->next->free && !block2->next->heap_start)
-	{
-		block1->size += (block2->size + block2->next->size + (2 * META_SIZE));
-		block1->next = block2->next->next;
-		return (block1);
-	}
-	else if (block1 != block2)
+	if (block1 != block2)
 	{
 		block1->size += (block2->size + META_SIZE);
 		block1->next = block2->next;
-		return (block1);
+		if (block1->next)
+			block1->next->prev = block1;
+		block2 = block1;
 	}
-	else if (block2->next->free && !block2->next->heap_start)
+	if (block2->next && !block2->next->heap_start && block2->next->free)
 	{
 		block2->size += (block2->next->size + META_SIZE);
 		block2->next = block2->next->next;
+		if (block2->next)
+			block2->next->prev = block2;
 	}
-	block2->free = 1;
 	return (block2);
 }
 
-void	munmap_heap(t_heap *prev, t_heap *heap, size_t size)
+void		munmap_heap(t_heap *prev, t_heap *heap, size_t size)
 {
 	t_meta	*block_prev;
 
@@ -59,52 +56,61 @@ void	munmap_heap(t_heap *prev, t_heap *heap, size_t size)
 		prev->next = heap->next;
 	else
 		g_memory.heap = heap->next;
+	munmap(heap, heap->size);
 }
 
-void	find_and_free(void *ptr, t_meta *block, t_heap *prev, t_heap *heap)
+void		find_and_free(void *ptr, t_meta *block)
 {
 	t_meta	*tmp;
 	size_t	size;
 
-	tmp = block;
 	size = 0;
+	tmp = block;
 	while (block && (void*)block->data != ptr)
 	{
 		tmp = block;
 		block = block->next;
-		if (block->heap_start || !block)
+		if (!block || block->heap_start)
 			return ;
 	}
 	size = block->size;
-	tmp = tmp->free ? tmp : block;
+	block->free = 1;
+	tmp = (tmp->free && !block->heap_start) ? tmp : block;
 	block = defragment_blocks(tmp, block);
-	if (block->heap_start && block->size + META_SIZE == heap->size)
-	{
-		munmap_heap(prev, heap, size);
-	}
 }
 
-void	free(void *ptr)
+static void	ft_norminette(t_meta *block, void *ptr, t_heap *heap, t_heap *prev)
+{
+	if (block->data == ptr && block->size > SMALL)
+		munmap_heap(prev, heap, block->size);
+	else
+		find_and_free(ptr, block);
+}
+
+void		free(void *ptr)
 {
 	t_heap	*heap;
 	t_heap	*prev;
 
+	if (pthread_mutex_lock(&g_safe.mut_free) == EINVAL)
+	{
+		pthread_mutex_init(&g_safe.mut_free, NULL);
+		pthread_mutex_lock(&g_safe.mut_free);
+	}
 	heap = g_memory.heap;
 	prev = heap;
 	if (!ptr)
+	{
+		pthread_mutex_unlock(&g_safe.mut_free);
 		return ;
+	}
 	while (heap && !((void*)heap < ptr && (void*)(heap) + heap->size > ptr))
 	{
 		prev = heap;
 		heap = heap->next;
 	}
 	if (heap)
-	{
-		if (((t_meta*)heap->block)->data == ptr \
-				&& heap->size == META_SIZE + ((t_meta*)heap->block)->size)
-			munmap_heap(prev, heap, ((t_meta*)heap->block)->size);
-		else
-			find_and_free(ptr, (t_meta*)heap->block, prev, heap);
-	}
+		ft_norminette((t_meta*)heap->block, ptr, heap, prev);
 	debug_show_actions(FREE_FCT, ptr);
+	pthread_mutex_unlock(&g_safe.mut_free);
 }

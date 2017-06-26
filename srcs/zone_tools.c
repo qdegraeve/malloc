@@ -14,25 +14,33 @@
 
 t_meta	*zone_list(size_t size)
 {
+	t_meta	*block;
+
 	if (size <= TINY)
-		return (g_memory.tiny);
+		block = g_memory.tiny;
 	else if (size <= SMALL)
-		return (g_memory.small);
+		block = g_memory.small;
 	else
-		return (g_memory.large);
+		block = g_memory.large;
+	while (block && block->next)
+		block = block->next;
+	return (block);
 }
 
-int		get_zone_size(size_t size)
+size_t	get_zone_size(size_t size)
 {
-	int		zone;
+	size_t	zone;
 	int		page;
 
 	page = getpagesize();
-	if (size <= SMALL)
-		zone = (((((size + META_SIZE) * 100) + HEAP_META_SIZE - 1) / page) \
+	if (size <= TINY)
+		zone = (((((TINY + META_SIZE) * 100) + HEAP_META_SIZE) / page) \
+				* page) + page;
+	else if (size <= SMALL)
+		zone = (((((SMALL + META_SIZE) * 100) + HEAP_META_SIZE) / page) \
 				* page) + page;
 	else
-		zone = size + META_SIZE + HEAP_META_SIZE;
+		zone = (((size + META_SIZE + HEAP_META_SIZE) / page) * page) + page;
 	return (zone);
 }
 
@@ -52,10 +60,11 @@ void	*new_heap(size_t size)
 	t_heap	*new;
 
 	heap = g_memory.heap;
-	new = mmap(0, size, FLAG_PROT, FLAG_MAP, 0, 0);
+	if (!(new = mmap(0, size, FLAG_PROT, FLAG_MAP, -1, 0)))
+		return (NULL);
 	new->size = size - HEAP_META_SIZE;
 	new->next = NULL;
-	while (heap && heap->next)
+	while (heap)
 		heap = heap->next;
 	if (heap)
 		heap->next = new;
@@ -78,7 +87,7 @@ t_meta	*alloc_zone(t_meta *last, size_t size)
 	new->next = NULL;
 	new->prev = NULL;
 	new->heap_start = 1;
-	if (size < (zone_size - META_SIZE - HEAP_META_SIZE))
+	if (size <= SMALL && size < (zone_size - META_SIZE - HEAP_META_SIZE))
 		adjust_zone(new, size);
 	if (last)
 	{

@@ -4,6 +4,13 @@ void	show_alloc_mem(void);
 
 int main()
 {
+	// malloc(65);
+	// malloc(65);
+	// malloc(65);
+
+	// malloc(1024);
+	// malloc(1024);
+	// malloc(1024);
 	malloc(1024);
 	malloc(1024 * 32);
 	malloc(1024*1024);

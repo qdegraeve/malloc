@@ -18,16 +18,18 @@ FLAGS= -Wall -Wextra -Werror
 CC= clang
 INCLUDES= includes/
 LIBPATH= libft
-LIB= $(LIBPATH)/libft.a
+LIB= $(LIBPATH)/libft.a 
 
 VPATH= srcs/
 SRCS= \
 	  malloc.c \
+	  calloc.c \
 	  free.c \
 	  realloc.c \
 	  show_alloc_mem.c \
 	  zone_tools.c \
-	  debug.c
+	  debug.c \
+	  norme.c
 
 OBJDIR= objs/
 OBJS= $(patsubst %.c, $(OBJDIR)%.o, $(SRCS))
@@ -35,7 +37,7 @@ OBJS= $(patsubst %.c, $(OBJDIR)%.o, $(SRCS))
 default: all
 
 test: re
-	$(CC) $(FLAGS) -I $(INCLUDES) -L. -lft_malloc -o test tests/test.c
+	$(CC) $(FLAGS) -I $(INCLUDES) -lpthead -L. -lft_malloc -o test tests/test.c
 
 all: $(LIB) $(NAME)
 
@@ -44,7 +46,7 @@ $(LIB):
 
 $(NAME): $(OBJS)
 	$(CC) -shared -o $(NAME) $(OBJS) -L $(LIBPATH) -lft
-	ln -s $(NAME) libft_malloc.so
+	ln -sf $(NAME) libft_malloc.so
 
 $(OBJDIR)%.o: %.c $(OBJDIR)
 	$(CC) $(FLAGS) -I libft/include -I $(INCLUDES) -o $@ -c $<
@@ -57,6 +59,7 @@ clean:
 	rm -rf $(OBJS)
 
 fclean: clean
+	make fclean -C $(LIBPATH)
 	rm -rf $(NAME) libft_malloc.so
 
 re: fclean all

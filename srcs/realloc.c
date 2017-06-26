@@ -26,7 +26,7 @@ t_meta	*check_ptr(void *ptr)
 	while (block && (void*)block->data != ptr)
 	{
 		block = block->next;
-		if (block->heap_start || !block)
+		if (!block || block->heap_start)
 			return (NULL);
 	}
 	return (block);
@@ -60,21 +60,24 @@ void	*realloc(void *ptr, size_t size)
 {
 	t_meta	*block;
 
+	if (pthread_mutex_lock(&g_safe.mut_realloc) == EINVAL)
+	{
+		pthread_mutex_init(&g_safe.mut_realloc, NULL);
+		pthread_mutex_lock(&g_safe.mut_realloc);
+	}
 	block = NULL;
 	if (!ptr)
-		return (malloc(size));
-	if (!(block = check_ptr(ptr)))
-		return (move_pointer(ptr, size, 1));
-	if (size == 0)
-		return (move_pointer(ptr, size, 1));
-	if (!has_space_after(block->next, block->size, size))
-		return (move_pointer(ptr, size, 1));
+		return (mutex_unlock(malloc(size), &g_safe.mut_realloc));
+	if (!(block = check_ptr(ptr)) || size == 0 \
+		|| !has_space_after(block->next, block->size, size))
+		return (mutex_unlock(move_pointer(ptr, size, 1), &g_safe.mut_realloc));
 	block->size += (block->next->size + META_SIZE);
 	block->next = block->next->next;
 	if (block->next)
 		block->next->prev = block;
 	if (block->size > size)
 		adjust_zone(block, size);
+	pthread_mutex_unlock(&g_safe.mut_realloc);
 	return (ptr);
 }
 
@@ -82,20 +85,23 @@ void	*reallocf(void *ptr, size_t size)
 {
 	t_meta	*block;
 
+	if (pthread_mutex_lock(&g_safe.mut_reallocf) == EINVAL)
+	{
+		pthread_mutex_init(&g_safe.mut_reallocf, NULL);
+		pthread_mutex_lock(&g_safe.mut_reallocf);
+	}
 	block = NULL;
 	if (!ptr)
-		return (malloc(size));
-	if (!(block = check_ptr(ptr)))
-		return (move_pointer(ptr, size, 0));
-	if (size == 0)
-		return (move_pointer(ptr, size, 0));
-	if (!has_space_after(block->next, block->size, size))
-		return (move_pointer(ptr, size, 0));
+		return (mutex_unlock(malloc(size), &g_safe.mut_reallocf));
+	if (!(block = check_ptr(ptr)) || size == 0 \
+		|| !has_space_after(block->next, block->size, size))
+		return (mutex_unlock(move_pointer(ptr, size, 0), &g_safe.mut_reallocf));
 	block->size += (block->next->size + META_SIZE);
 	block->next = block->next->next;
 	if (block->next)
 		block->next->prev = block;
 	if (block->size > size)
 		adjust_zone(block, size);
+	pthread_mutex_unlock(&g_safe.mut_reallocf);
 	return (ptr);
 }
